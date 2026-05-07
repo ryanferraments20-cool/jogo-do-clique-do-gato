@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Clicker do Gato Feliz</title>
+  <style>
+    body { text-align: center; font-family: Arial, sans-serif; background: linear-gradient(#f0f0f0, #d0f0ff); margin: 0; padding: 20px; }
+    h1 { color: #333; }
+    #gato { width: 150px; cursor: pointer; transition: transform 0.2s ease; margin-top: 20px; }
+    #status { margin-top: 20px; font-size: 20px; }
+    button { margin-top: 15px; padding: 10px 20px; font-size: 16px; border: none; background: #4CAF50; color: white; cursor: pointer; border-radius: 5px; }
+    button:hover { background: #45a049; }
+    #botaoRacao { display: none; }
+    #botaoAcademia { display: none; background: #2196F3; }
+    #botaoAcademia:hover { background: #1976D2; }
+    #videoArea { display: none; margin-top: 20px; }
+    #fecharVideo { display: none; background: #f44336; }
+    #fecharVideo:hover { background: #d32f2f; }
+  </style>
+</head>
+<body>
+  <h1>?? Gato Feliz Clicker ??</h1>
+
+  <!-- Gato inicial -->
+  <img id="gato" src="file:///C:/Users/amber.e%20compania/Desktop/sites%20e%20jogos%20de%20cria%C3%A7%C3%A3o/ryan/pasta%20de%20gifs/ezgif.com-animated-gif-maker.gif" alt="Gato Bravo">
+
+  <div id="status">
+    Dinheiro: <span id="dinheiro">0</span><br>
+    Felicidade: <span id="felicidade">1</span><br>
+    Estágio: <span id="estagio">1</span>
+  </div>
+
+  <button onclick="evoluir()">Evoluir Gato</button>
+  <button id="botaoRacao" onclick="darRacao()">Dar Ração (50 dinheiros)</button>
+  <button id="botaoAcademia" onclick="pagarAcademia()">Pagar Academia (150 dinheiros)</button>
+
+  <div id="videoArea">
+    <p>Assista o vídeo para continuar jogando:</p>
+    <iframe id="video" width="300" height="500" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe><br>
+    <button id="fecharVideo" onclick="fecharVideo()">Fechar Vídeo</button>
+  </div>
+
+  <script>
+    let dinheiro = 0;
+    let felicidade = 1;
+    let estagio = 1;
+    let jogoPausado = false;
+    let racaoDada = 0;
+    let academiaPaga = false;
+
+    const gato = document.getElementById("gato");
+    const botaoRacao = document.getElementById("botaoRacao");
+    const botaoAcademia = document.getElementById("botaoAcademia");
+    const videoArea = document.getElementById("videoArea");
+    const video = document.getElementById("video");
+    const fecharVideoBtn = document.getElementById("fecharVideo");
+
+    function atualizarEstagio(novoEstagio) {
+      estagio = novoEstagio;
+      document.getElementById("estagio").textContent = estagio;
+    }
+
+    // Clique no gato
+    gato.addEventListener("click", () => {
+      if (jogoPausado) return;
+      dinheiro++;
+      document.getElementById("dinheiro").textContent = dinheiro;
+      gato.style.transform = "scale(1.1)";
+      setTimeout(() => gato.style.transform = "scale(1)", 200);
+    });
+
+    function evoluir() {
+      if (jogoPausado) return;
+      if (dinheiro >= 10) {
+        dinheiro -= 10;
+        felicidade++;
+        document.getElementById("dinheiro").textContent = dinheiro;
+        document.getElementById("felicidade").textContent = felicidade;
+
+        if (felicidade >= 12 && felicidade <= 19) {
+          gato.src = "file:///C:/Users/amber.e%20compania/Desktop/sites%20e%20jogos%20de%20cria%C3%A7%C3%A3o/ryan/pasta%20de%20gifs/gato%20super%20feliz.png";
+          atualizarEstagio(2);
+        }
+        if (felicidade >= 20 && felicidade < 40) {
+          gato.src = "file:///C:/Users/amber.e%20compania/Desktop/sites%20e%20jogos%20de%20cria%C3%A7%C3%A3o/ryan/pasta%20de%20gifs/gato%20super%20feliz.png";
+          atualizarEstagio(3);
+        }
+        if (felicidade >= 40 && felicidade < 45) {
+          gato.src = "imagens/gato_realista.png";
+          atualizarEstagio(4);
+        }
+        if (felicidade >= 45 && felicidade < 65) {
+          gato.src = "imagens/gato_pedindo_racao.png";
+          atualizarEstagio("4B");
+          botaoRacao.style.display = "inline-block";
+        }
+        if (felicidade >= 65 && felicidade < 70) {
+          gato.src = "file:///C:/Users/amber.e%20compania/Desktop/sites%20e%20jogos%20de%20cria%C3%A7%C3%A3o/ryan/pasta%20de%20gifs/gato%20engra%C3%A7ado.png";
+          atualizarEstagio(5);
+          botaoRacao.style.display = "none";
+        }
+
+        if (racaoDada > 10) {
+          gato.src = "imagens/gato_gordo.png";
+          atualizarEstagio("Gordo");
+          botaoAcademia.style.display = "inline-block";
+        }
+
+        if (academiaPaga && felicidade >= 70 && felicidade < 75) {
+          gato.src = "imagens/gato_treinando.png";
+          atualizarEstagio("Treinando");
+        }
+
+        if (academiaPaga && felicidade >= 75) {
+          gato.src = "imagens/gato_campeao.png";
+          atualizarEstagio("Campeão");
+          alert("?? O Gato é Campeão!");
+        }
+      }
+    }
+
+    function darRacao() {
+      if (jogoPausado) return;
+      if (dinheiro >= 50) {
+        dinheiro -= 50;
+        document.getElementById("dinheiro").textContent = dinheiro;
+        gato.src = "imagens/gato_pedindo_racao.png";
+        racaoDada++;
+      }
+    }
+
+    function pagarAcademia() {
+      if (dinheiro >= 150) {
+        dinheiro -= 150;
+        document.getElementById("dinheiro").textContent = dinheiro;
+        academiaPaga = true;
+        alert("Academia paga! O gato pode treinar.");
+      }
+    }
+
+    // Vídeo só com tecla S
+    document.addEventListener("keydown", (e) => {
+      if (e.key.toLowerCase() === "s") {
+        jogoPausado = true;
+        videoArea.style.display = "block";
+        fecharVideoBtn.style.display = "inline-block";
+        video.src = "https://www.youtube.com/embed/_sIFKZlvtTA?enablejsapi=1";
+        setTimeout(() => { fecharVideo(); alert("O vídeo terminou, você pode voltar a jogar!"); }, 26000);
+      }
+    });
+
+    function fecharVideo() {
+      jogoPausado = false;
+      videoArea.style.display = "none";
+      fecharVideoBtn.style.display = "none";
+      video.src = "";
+    }
+  </script>
+</body>
+</html>
+
