@@ -24,6 +24,9 @@
   <!-- Gato inicial -->
   <img id="gato" src="https://raw.githubusercontent.com/ryanferraments20-cool/jogo-do-clique-do-gato/main/ezgif.com-animated-gif-maker.gif" alt="Gato Bravo">
 
+  <!-- Som do miado -->
+  <audio id="somMiar" src="https://raw.githubusercontent.com/ryanferraments20-cool/jogo-do-clique-do-gato/main/gato_miando.mp3"></audio>
+
   <div id="status">
     Dinheiro: <span id="dinheiro">0</span><br>
     Felicidade: <span id="felicidade">1</span><br>
@@ -54,6 +57,7 @@
     const videoArea = document.getElementById("videoArea");
     const video = document.getElementById("video");
     const fecharVideoBtn = document.getElementById("fecharVideo");
+    const somMiar = document.getElementById("somMiar");
 
     function atualizarEstagio(novoEstagio) {
       estagio = novoEstagio;
@@ -76,6 +80,12 @@
         felicidade++;
         document.getElementById("dinheiro").textContent = dinheiro;
         document.getElementById("felicidade").textContent = felicidade;
+
+        // condição especial: miar só no estágio 1 com 100 de dinheiro
+        if (estagio === 1 && dinheiro >= 100) {
+          somMiar.currentTime = 0;
+          somMiar.play();
+        }
 
         if (felicidade >= 12 && felicidade <= 19) {
           gato.src = "https://raw.githubusercontent.com/ryanferraments20-cool/jogo-do-clique-do-gato/main/gato%20super%20feliz.png";
@@ -157,5 +167,5 @@
     }
   </script>
 </body>
-</html>
+
 
